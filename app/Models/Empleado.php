@@ -13,7 +13,9 @@ class Empleado extends Authenticatable
 
     protected $table = 'empleado';
     protected $fillable = [
-        'nombre', 'email', 'password',
+        'nombre',
+        'email',
+        'password',
     ];
 
     protected $hidden = [

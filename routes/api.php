@@ -7,88 +7,83 @@ use App\Http\Controllers\HorarioController;
 use App\Http\Middleware\ValidarId;
 
 
-Route::get('/obtenerTodosEmpleados', function () {
-    return EmpleadoController::obtenerTodosEmpleados();
+Route::get('/empleados', function () {
+    return EmpleadoController::obtenerTodos();
 });
 
-Route::get('/obtenerPorIdEmpleado/{id}', function ($id) {
-    return EmpleadoController::obtenerPorIdEmpleado($id);
+Route::get('/empleados/{id}', function ($id) {
+    return EmpleadoController::obtenerPorId($id);
 })->middleware(ValidarId::class);
 
-Route::get('/obtenerProyectosDeEmpleado/{id}', function ($id) {
-    return EmpleadoController::obtenerProyectosDeEmpleado($id);
+Route::get('/empleados/proyectos/{id}', function ($id) {
+    return EmpleadoController::obtenerProyectos($id);
 })->middleware(ValidarId::class);
 
-Route::get('/obtenerHorarioDeEmpleado/{id}', function ($id) {
-    return EmpleadoController::obtenerHorarioDeEmpleado($id);
+Route::get('/empleados/horario/{id}', function ($id) {
+    return EmpleadoController::obtenerHorario($id);
 })->middleware(ValidarId::class);
 
 
-Route::post('/crearEmpleado', [EmpleadoController::class, 'crearEmpleado']);
+Route::post('/empleados', [EmpleadoController::class, 'crear']);
 
-Route::get('/csrf-token', function () {
-    return response()->json(['csrf_token' => csrf_token()]);
-});
-
-Route::delete('/eliminarEmpleado/{id}', function ($id) {
-    return EmpleadoController::eliminarEmpleado($id);
+Route::delete('/empleados/{id}', function ($id) {
+    return EmpleadoController::eliminar($id);
 })->middleware(ValidarId::class);
 
-Route::put('/actualizarEmpleado/{id}', function ($id) {
-    return EmpleadoController::actualizarEmpleado(request(), $id);
+Route::put('/empleados/{id}', function ($id) {
+    return EmpleadoController::actualizar(request(), $id);
 })->middleware(ValidarId::class);
 
-Route::middleware('auth:sanctum')->post('/logout', [EmpleadoController::class, 'logout']);
+Route::middleware('auth:sanctum')->post('/empleados/logout', [EmpleadoController::class, 'logout']);
 
-Route::post("/login",[EmpleadoController::class, "login"]);
+Route::post("/empleados/login",[EmpleadoController::class, "login"]);
 
 // Proyectos
 
 
-Route::get('/obtenerTodosProyectos', function () {
-    return ProyectoController::obtenerTodosProyectos();
+Route::get('/proyectos', function () {
+    return ProyectoController::obtenerTodos();
 });
 
-Route::get('/obtenerPorIdProyecto/{id}', function ($id) {
-    return ProyectoController::obtenerPorIdProyecto($id);
+Route::get('/proyectos/{id}', function ($id) {
+    return ProyectoController::obtenerPorId($id);
 })->middleware(ValidarId::class);
 
-Route::get('/obtenerEmpleadoPorProyecto/{id}', function ($id) {
-    return ProyectoController::obtenerEmpleadoPorProyecto($id);
+Route::get('/proyectos/empleados/{id}', function ($id) {
+    return ProyectoController::obtenerEmpleados($id);
 })->middleware(ValidarId::class);
 
-Route::post('/crearProyecto', [ProyectoController::class, 'crearProyecto']);
+Route::post('/proyectos', [ProyectoController::class, 'crear']);
 
-Route::delete('/eliminarProyecto/{id}', function ($id) {
-    return ProyectoController::eliminarProyecto($id);
+Route::delete('/proyectos/{id}', function ($id) {
+    return ProyectoController::eliminar($id);
 })->middleware(ValidarId::class);
 
-Route::put('/actualizarProyecto/{id}', function ($id) {
-    return ProyectoController::actualizarProyecto(request(), $id);
+Route::put('/proyectos/{id}', function ($id) {
+    return ProyectoController::actualizar(request(), $id);
 })->middleware(ValidarId::class);
 
 // Horarios
 
 
-Route::get('/obtenerTodosHorarios', function () {
-    return HorarioController::obtenerTodosHorarios();
+Route::get('/horarios', function () {
+    return HorarioController::obtenerTodos();
 });
 
-Route::get('/obtenerPorIdHorario/{id}', function ($id) {
-    return HorarioController::obtenerPorIdHorario($id);
+Route::get('/horarios/{id}', function ($id) {
+    return HorarioController::obtenerPorId($id);
 })->middleware(ValidarId::class);
 
-Route::get('/obtenerEmpleadoPorHorario/{id}', function ($id) {
-    return HorarioController::obtenerEmpleadoPorHorario($id);
+Route::get('/horarios/empleado/{id}', function ($id) {
+    return HorarioController::obtenerEmpleado($id);
 })->middleware(ValidarId::class);
 
-Route::post('/crearHorario', [HorarioController::class, 'crearHorario']);
+Route::post('/horarios', [HorarioController::class, 'crear']);
 
-Route::delete('/eliminarHorario/{id}', function ($id) {
-    return HorarioController::eliminarHorario($id);
+Route::delete('/horarios/{id}', function ($id) {
+    return HorarioController::eliminar($id);
 })->middleware(ValidarId::class);
 
-Route::put('/actualizarHorario/{id}', function ($id) {
-    return HorarioController::actualizarHorario(request(), $id);
+Route::put('/horarios/{id}', function ($id) {
+    return HorarioController::actualizar(request(), $id);
 })->middleware(ValidarId::class);
-

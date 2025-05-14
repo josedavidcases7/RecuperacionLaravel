@@ -8,22 +8,24 @@ use Illuminate\Support\Facades\Hash;
 
 class EmpleadoController extends Controller
 {
-    public static function obtenerTodosEmpleados()
+    public static function obtenerTodos()
     {
-        $empleado = Empleado::all();
-        return response()->json($empleado, 200);
+        $empleados = Empleado::all();
+        if ($empleados->isEmpty()) {
+            return response()->json(["message" => "No hay empleados registrados"], 404);
+        }
+        return response()->json($empleados, 200);
     }
 
-    public static function obtenerPorIdEmpleado($id)
+    public static function obtenerPorId($id)
     {
         $empleado = Empleado::find($id);
-        if ($empleado != null) {
-            return response()->json($empleado, 200);
-        } else {
+        if (!$empleado) {
             return response()->json(["message" => "Empleado no encontrado"], 404);
         }
+        return response()->json($empleado, 200);
     }
-    public static function crearEmpleado(Request $empleado)
+    public static function crear(Request $empleado)
     {
         $validated = $empleado->validate([
             'nombre' => 'required|string|max:32',
@@ -40,7 +42,7 @@ class EmpleadoController extends Controller
         return response()->json($empleado, 201);
     }
 
-    public static function eliminarEmpleado($id)
+    public static function eliminar($id)
     {
         $empleado = Empleado::find($id);
 
@@ -53,7 +55,7 @@ class EmpleadoController extends Controller
 
         return response()->json(["message" => "Empleado eliminado exitosamente"], 200);
     }
-    public static function actualizarEmpleado(Request $empleado, $id)
+    public static function actualizar(Request $empleado, $id)
     {
         $validated = $empleado->validate([
             'nombre' => 'required|string|max:32',
@@ -74,7 +76,7 @@ class EmpleadoController extends Controller
         return response()->json($empleado, 200);
     }
 
-    public static function obtenerHorarioDeEmpleado($id)
+    public static function obtenerHorario($id)
     {
         $empleado = Empleado::with('horario')->find($id);
 
@@ -85,7 +87,7 @@ class EmpleadoController extends Controller
         return response()->json($empleado->horario, 200);
     }
 
-    public static function obtenerProyectosDeEmpleado($id)
+    public static function obtenerProyectos($id)
     {
         $empleado = Empleado::with('proyectos')->find($id);
 

@@ -7,29 +7,32 @@ use App\Models\Horario;
 
 class HorarioController extends Controller
 {
-    public static function obtenerTodosHorarios()
+    public static function obtenerTodos()
     {
-        $horario = Horario::all();
+        $horarios = Horario::all();
+        if ($horarios->isEmpty()) {
+            return response()->json(["message" => "No hay horarios registrados"], 404);
+        }
+        return response()->json($horarios, 200);
+    }
+
+    public static function obtenerPorId($id)
+    {
+        $horario = Horario::find($id);
+        if (!$horario) {
+            return response()->json(["message" => "Horario no encontrado"], 404);
+        }
         return response()->json($horario, 200);
     }
 
-    public static function obtenerPorIdHorario($id)
-    {
-        $horario = Horario::find($id);
-        if ($horario != null) {
-            return response()->json($horario, 200);
-        } else {
-            return response()->json(["message" => "Horario no encontrado"], 404);
-        }
-    }
-    public static function crearHorario(Request $horario)
+    public static function crear(Request $horario)
     {
         $validated = $horario->validate([
             'id_empleado' => 'required|exists:empleado,id',
             'hora_entrada' => 'required|date_format:Y-m-d H:i:s',
             'hora_salida' => 'required|date_format:Y-m-d H:i:s|after:hora_entrada',
         ]);
-    
+
         $horario = Horario::create([
             'id_empleado' => $validated['id_empleado'],
             'hora_entrada' => $validated['hora_entrada'],
@@ -38,7 +41,7 @@ class HorarioController extends Controller
         return response()->json($horario, 201);
     }
 
-    public static function eliminarHorario($id)
+    public static function eliminar($id)
     {
         $horario = Horario::find($id);
 
@@ -51,7 +54,7 @@ class HorarioController extends Controller
 
         return response()->json(["message" => "Horario eliminado exitosamente"], 200);
     }
-    public static function actualizarHorario(Request $horario, $id)
+    public static function actualizar(Request $horario, $id)
     {
         $validated = $horario->validate([
             'id_empleado' => 'required|exists:empleado,id',
@@ -72,7 +75,7 @@ class HorarioController extends Controller
         return response()->json($horario, 200);
     }
 
-    public static function obtenerEmpleadoPorHorario($horario_id)
+    public static function obtenerEmpleado($horario_id)
     {
         $horario = Horario::find($horario_id);
 

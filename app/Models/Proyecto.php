@@ -11,7 +11,9 @@ class Proyecto extends Model
 
     protected $table = 'proyecto';
     protected $fillable = [
-        'id_empleado', 'nombre', 'horas_estimadas', 
+        'id_empleado',
+        'nombre',
+        'horas_estimadas',
     ];
 
     public $timestamps = false;

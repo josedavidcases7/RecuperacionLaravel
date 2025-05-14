@@ -7,22 +7,25 @@ use App\Models\Proyecto;
 
 class ProyectoController extends Controller
 {
-    public static function obtenerTodosProyectos()
+    public static function obtenerTodos()
     {
-        $proyecto = Proyecto::all();
+        $proyectos = Proyecto::all();
+        if ($proyectos->isEmpty()) {
+            return response()->json(["message" => "No hay proyectos registrados"], 404);
+        }
+        return response()->json($proyectos, 200);
+    }
+
+    public static function obtenerPorId($id)
+    {
+        $proyecto = Proyecto::find($id);
+        if (!$proyecto) {
+            return response()->json(["message" => "Proyecto no encontrado"], 404);
+        }
         return response()->json($proyecto, 200);
     }
 
-    public static function obtenerPorIdProyecto($id)
-    {
-        $proyecto = Proyecto::find($id);
-        if ($proyecto != null) {
-            return response()->json($proyecto, 200);
-        } else {
-            return response()->json(["message" => "Proyecto no encontrado"], 404);
-        }
-    }
-    public static function crearProyecto(Request $proyecto)
+    public static function crear(Request $proyecto)
     {
         $validated = $proyecto->validate([
             'id_empleado' => 'required|exists:empleado,id',
@@ -38,7 +41,7 @@ class ProyectoController extends Controller
         return response()->json($proyecto, 201);
     }
 
-    public static function eliminarProyecto($id)
+    public static function eliminar($id)
     {
         $proyecto = Proyecto::find($id);
 
@@ -51,7 +54,8 @@ class ProyectoController extends Controller
 
         return response()->json(["message" => "Proyecto eliminado exitosamente"], 200);
     }
-    public static function actualizarProyecto(Request $proyecto, $id)
+
+    public static function actualizar(Request $proyecto, $id)
     {
         $validated = $proyecto->validate([
             'id_empleado' => 'required|exists:empleado,id',
@@ -72,14 +76,13 @@ class ProyectoController extends Controller
         return response()->json($proyecto, 200);
     }
 
-    public static function obtenerEmpleadoPorProyecto($proyecto_id)
+    public static function obtenerEmpleados($proyecto_id)
     {
         $proyecto = Proyecto::find($proyecto_id);
 
         if (!$proyecto || !$proyecto->empleados) {
             return response()->json(["message" => "Empleado no encontrado para este proyecto"], 404);
         }
-
         return response()->json($proyecto->empleados, 200);
     }
 }
